@@ -1,0 +1,199 @@
+﻿<Window x:Class="Testovoe_Zadaniye.Views.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Testovoe_Zadaniye.Views.Windows"
+        xmlns:vm="clr-namespace:Testovoe_Zadaniye.ViewModels"
+        xmlns:cmd="clr-namespace:Testovoe_Zadaniye.Commands"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel  Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0">
+                <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFF55757" Content="Добавить заказ" Margin="20" Command="{Binding CreateOrderCommand}"/>
+                <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFD3F3A3" Content="Внести платеж" Margin="20" Command="{Binding OpenTopUpMenuCommand}"/>
+                <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFD3F3A3" Content="Заказы к оплате" Margin="20" Command="{Binding OpenPayedListCommand}"/>
+                <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFD3F3A3" Content="Оплаченные заказы" Margin="20" Command="{Binding OpenOrderListCommand}"/>
+                <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFD3F3A3" Content="Оплатить выбранный" Margin="20" Command="{Binding PayOrderCommand}"/>
+
+            </StackPanel>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Margin="5" Orientation="Vertical">
+            <TextBlock>
+            <TextBlock Text="Всего заказов: "/>
+            <TextBlock Text="{Binding Groups.Count}"/>
+                </TextBlock>
+            <TextBlock>
+            <TextBlock Text="Баланс: "/>
+            <TextBlock Text="{Binding Balance, UpdateSourceTrigger=PropertyChanged}" Name="BalanceField"/>
+                </TextBlock>
+        </StackPanel>
+
+        <GroupBox Grid.Column="1" Header="Заказы" Name="ListGrid">
+            <ListBox ItemsSource="{Binding Groups}" Name="ListBoxName" Height="400">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="#FF7BBF42" Width="550">
+                            <DockPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Margin="5">
+                                        <TextBlock>
+                                <TextBlock Text="Номер заказа : "/>
+                                <TextBlock Text="{Binding Id}"/>
+                            </TextBlock>
+                                        <TextBlock>
+                                <TextBlock Text="Стоимость заказа : "/>
+                                <TextBlock Text="{Binding Summa}"/>
+                            </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Margin="5">
+                                        <TextBlock>
+                                <TextBlock Text="Дата заказа : "/>
+                                <TextBlock Text="{Binding Date}"/>
+                            </TextBlock>
+                                        <TextBlock>
+                                <TextBlock Text="К оплате : "/>
+                                <TextBlock Text="{Binding SummaOplati}"/>
+                            </TextBlock>
+                                    </StackPanel>
+
+
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Right">
+                                    <TextBlock HorizontalAlignment="Right"  Name="IsPayed" Text="Не оплачен" Margin="0,0,10,0"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="Заказы" Visibility="Hidden" Name="ListPayedGrid">
+            <ListBox ItemsSource="{Binding GroupsPayed}" Name="ListBoxNamePayed" Height="400">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="#FF7BBF42" Width="550">
+                            <DockPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Margin="5">
+                                        <TextBlock>
+                                <TextBlock Text="Номер заказа : "/>
+                                <TextBlock Text="{Binding Id}"/>
+                            </TextBlock>
+                                        <TextBlock>
+                                <TextBlock Text="Стоимость заказа : "/>
+                                <TextBlock Text="{Binding Summa}"/>
+                            </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Margin="5">
+                                        <TextBlock>
+                                <TextBlock Text="Дата заказа : "/>
+                                <TextBlock Text="{Binding Date}"/>
+                            </TextBlock>
+                                        <TextBlock>
+                                <TextBlock Text="К оплате : "/>
+                                <TextBlock Text="{Binding SummaOplati}"/>
+                            </TextBlock>
+                                    </StackPanel>
+
+
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Right">
+                                    <TextBlock HorizontalAlignment="Right"  Name="IsPayed" Text="Оплачен" Margin="0,0,10,0"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+        <Grid Grid.Column="1" Visibility="Hidden" x:Name="Payment">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+                <Border BorderThickness="1" BorderBrush="#FF7BBF42">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Оплата заказа №: " Margin="10,0,0,0"/>
+                            <TextBlock Text="000000000000" Name="OrderId"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10">
+                                    <TextBlock Text="Введите сумму оплаты: "/>
+
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10">
+                                    <TextBlock Text="Остаток суммы для оплаты заказа: "/>
+
+                                </StackPanel>
+                            </StackPanel >
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+                                    <TextBox Text="" Margin="0" Width="50" x:Name="SummaOplati"/>
+                                    <TextBlock Text="₽"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+                                    <TextBlock Text="0" Margin="0" Width="50" x:Name="DeltaPayment" HorizontalAlignment="Right"/>
+                                    <TextBlock Text="₽"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border  BorderThickness="2" BorderBrush="#FF7BBF42" CornerRadius="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                    <Button Content="Оплатить" Width="85" BorderThickness="0" Background="#FFD3F3A3" Command="{Binding OpenTopUpMenuCommand}"/>
+                </Border>
+
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="1" Visibility="Hidden" Name="TopUpMenu">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+                <Border BorderThickness="1" BorderBrush="#FF7BBF42">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Пополнение счета: " Margin="10,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10">
+                                    <TextBlock Text="Введите сумму: "/>
+
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10">
+                                    <TextBlock Text="Текущий баланс: " />
+
+                                </StackPanel>
+                            </StackPanel >
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+                                    <TextBox  Name="TopUpValue" Text="1000" Margin="0" Width="50" />
+                                    <TextBlock Text="₽"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+                                    <TextBlock Name="CurrentBalance" Margin="0" Width="50" HorizontalAlignment="Right" Text="{Binding  ElementName=BalanceField, Path=Text, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Text="₽"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <StackPanel Orientation="Horizontal">
+                    <Border  BorderThickness="2" BorderBrush="#FF7BBF42" CornerRadius="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                    <Button Content="Пополнить" Width="85" BorderThickness="0" Background="#FFD3F3A3" Command="{Binding TopUpAnAccountCommand}"/>
+                </Border>
+                    <Border  BorderThickness="2" BorderBrush="#FF7BBF42" CornerRadius="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                        <Button Content="К заказам" Width="85" BorderThickness="0" Background="#FFD3F3A3" Command="{Binding HideTopUpMenuCommand}"/>
+                    </Border>
+                </StackPanel>
+                    </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
