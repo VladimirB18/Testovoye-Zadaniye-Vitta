@@ -100,6 +100,9 @@ namespace Testovoe_Zadaniye.ViewModels
                 Orders SelectedObj = MW.ListBoxName.SelectedItem as Orders;
                 using (var context = new DataBase())
                 {
+                    #region trigger duplicate
+                    context.Database.SqlQuery<DataBase>("CREATE TRIGGER Payments_INSERT ON dbo.Payments AFTER INSERT AS BEGIN UPDATE dbo.Orders SET[SummaOplati] = [SummaOplati] + [Payment] FROM inserted WHERE[IdOfOrder] = dbo.Orders.Id END");
+                    #endregion
                     double sum = 0;
                     var getNotEmpty = context.MoneyIncome.Where(s => s.Balance != 0);
 
@@ -136,7 +139,7 @@ namespace Testovoe_Zadaniye.ViewModels
                                 #endregion
 
                                 Groups.Remove(SelectedObj); // remove order from list
-                                
+                                GroupsPayed.Add(SelectedObj);
                                 break;
                             }
                             else
@@ -272,7 +275,7 @@ namespace Testovoe_Zadaniye.ViewModels
                     if (!Context.Database.Exists())
                     {
                         Context.Database.Create();
-                        Thread.Sleep(3000);
+                        Thread.Sleep(5000);
                         Context.Database.SqlQuery<DataBase>("CREATE TRIGGER Payments_INSERT ON dbo.Payments AFTER INSERT AS BEGIN UPDATE dbo.Orders SET[SummaOplati] = [SummaOplati] + [Payment] FROM inserted WHERE[IdOfOrder] = dbo.Orders.Id END");
                     }
                 }

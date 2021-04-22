@@ -21,8 +21,8 @@
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0">
                 <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFF55757" Content="Добавить заказ" Margin="20" Command="{Binding CreateOrderCommand}"/>
                 <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFD3F3A3" Content="Внести платеж" Margin="20" Command="{Binding OpenTopUpMenuCommand}"/>
-                <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFD3F3A3" Content="Заказы к оплате" Margin="20" Command="{Binding OpenPayedListCommand}"/>
-                <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFD3F3A3" Content="Оплаченные заказы" Margin="20" Command="{Binding OpenOrderListCommand}"/>
+                <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFD3F3A3" Content="Заказы к оплате" Margin="20" Command="{Binding OpenOrderListCommand}"/> 
+                <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFD3F3A3" Content="Оплаченные заказы" Margin="20" Command="{Binding OpenPayedListCommand}"/>
                 <Button Height="30" Width="140" BorderBrush="#FF7BBF42" Background="#FFD3F3A3" Content="Оплатить выбранный" Margin="20" Command="{Binding PayOrderCommand}"/>
 
             </StackPanel>
@@ -61,7 +61,7 @@
                                 <TextBlock Text="{Binding Date}"/>
                             </TextBlock>
                                         <TextBlock>
-                                <TextBlock Text="К оплате : "/>
+                                <TextBlock Text="Оплаченная сумма : "/>
                                 <TextBlock Text="{Binding SummaOplati}"/>
                             </TextBlock>
                                     </StackPanel>
@@ -100,7 +100,7 @@
                                 <TextBlock Text="{Binding Date}"/>
                             </TextBlock>
                                         <TextBlock>
-                                <TextBlock Text="К оплате : "/>
+                                <TextBlock Text="Оплаченная сумма : "/>
                                 <TextBlock Text="{Binding SummaOplati}"/>
                             </TextBlock>
                                     </StackPanel>
