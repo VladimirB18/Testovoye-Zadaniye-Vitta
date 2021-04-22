@@ -100,9 +100,7 @@ namespace Testovoe_Zadaniye.ViewModels
                 Orders SelectedObj = MW.ListBoxName.SelectedItem as Orders;
                 using (var context = new DataBase())
                 {
-                    #region trigger duplicate
-                    context.Database.SqlQuery<DataBase>("CREATE TRIGGER Payments_INSERT ON dbo.Payments AFTER INSERT AS BEGIN UPDATE dbo.Orders SET[SummaOplati] = [SummaOplati] + [Payment] FROM inserted WHERE[IdOfOrder] = dbo.Orders.Id END");
-                    #endregion
+               
                     double sum = 0;
                     var getNotEmpty = context.MoneyIncome.Where(s => s.Balance != 0);
 
@@ -137,7 +135,7 @@ namespace Testovoe_Zadaniye.ViewModels
                                     context.SaveChanges();
                                 }
                                 #endregion
-
+                                SelectedObj.SummaOplati = SelectedObj.Summa;
                                 Groups.Remove(SelectedObj); // remove order from list
                                 GroupsPayed.Add(SelectedObj);
                                 break;
@@ -275,8 +273,10 @@ namespace Testovoe_Zadaniye.ViewModels
                     if (!Context.Database.Exists())
                     {
                         Context.Database.Create();
-                        Thread.Sleep(5000);
-                        Context.Database.SqlQuery<DataBase>("CREATE TRIGGER Payments_INSERT ON dbo.Payments AFTER INSERT AS BEGIN UPDATE dbo.Orders SET[SummaOplati] = [SummaOplati] + [Payment] FROM inserted WHERE[IdOfOrder] = dbo.Orders.Id END");
+                 
+                       // Context.Database.SqlQuery<DataBase>("CREATE TRIGGER Payments_INSERT ON dbo.Payments AFTER INSERT AS BEGIN UPDATE dbo.Orders SET[SummaOplati] = [SummaOplati] + [Payment] FROM inserted WHERE[IdOfOrder] = dbo.Orders.Id END");
+                        string com = "CREATE TRIGGER Payments_INSERT ON dbo.Payments AFTER INSERT AS BEGIN UPDATE dbo.Orders SET[SummaOplati] = [SummaOplati] + [Payment] FROM inserted WHERE[IdOfOrder] = dbo.Orders.Id END";
+                        Context.Database.ExecuteSqlCommand(com);
                     }
                 }
                 catch (Exception ex)
